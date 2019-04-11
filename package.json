@@ -38,7 +38,13 @@
   "@pika/pack": {
     "pipeline": [
       [
-        "@pika/plugin-standard-pkg"
+        "@pika/plugin-standard-pkg",
+        {
+          "exclude": [
+            "**/*.spec.ts",
+            "**/*.ts.snap"
+          ]
+        }
       ],
       [
         "@pika/plugin-build-node"
