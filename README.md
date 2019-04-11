@@ -2,6 +2,8 @@
 
 Belgian NRN (National Registry Number) utility functions.
 
+[![Build Status](https://travis-ci.org/Moeriki/be-nrn.svg?branch=master)](https://travis-ci.org/Moeriki/be-nrn) [![Coverage Status](https://coveralls.io/repos/github/Moeriki/be-nrn/badge.svg?branch=master)](https://coveralls.io/github/Moeriki/be-nrn?branch=master) [![dependencies Status](https://david-dm.org/moeriki/be-nrn/status.svg)](https://david-dm.org/moeriki/be-nrn) [![NPM version](https://img.shields.io/npm/v/be-nrn.svg)](https://img.shields.io/npm/v/be-nrn.svg)
+
 ## Quick start
 
 ```sh
