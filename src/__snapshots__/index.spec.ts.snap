@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getBirthDate() should throw on invalid checksum 1`] = `"Could not calculate birthDate with invalid checksum of \\"11\\", expected \\"84\\" for 1900 or \\"16\\" for 2000"`;
+
+exports[`normalize() should throw on non-string types 1`] = `"Could not normalize nrn of invalid type"`;
+
+exports[`normalize() should throw on non-string types 2`] = `"Could not normalize nrn of invalid type"`;
+
+exports[`parse() should throw if invalid format 1`] = `"Could not parse nrn of invalid length"`;
+
+exports[`parse() should throw on invalid type 1`] = `"Could not parse nrn of invalid type"`;

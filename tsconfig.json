@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "lib": ["es2018"],
+    "module": "commonjs",
+    "strict": true
+  }
+}
