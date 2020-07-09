@@ -36,8 +36,8 @@ export function getAge(
 export function getBirthDate(nrn: NrnInput): Date {
   const { birthDate, serial, checksum } = parse(nrn);
   const partialYear = birthDate.slice(0, 2); // Eg. '86' from '860814'
-  const month = Number(birthDate.slice(2, 4)); // Eg. 8 from '860814'
-  const day = Number(birthDate.slice(4, 6)); // Eg. 14 from '860814'
+  const month = normalizeMonth(birthDate.slice(2, 4)); // Eg. 8 from '860814'
+  const day = Number(birthDate.slice(4, 6)) || 1; // Eg. 14 from '860814'
   let year: number;
   const checksum19 = mod97(`${birthDate}${serial}`);
   const checksum20 = mod97(`2${birthDate}${serial}`);
@@ -84,7 +84,6 @@ export function normalize(nrn: NrnInput): string {
 export function parse(nrnInput: NrnInput): Nrn {
   if (typeof nrnInput === 'string') {
     const normalizedNrn = normalize(nrnInput);
-    normalizedNrn;
     if (normalizedNrn.length !== LENGTH_VALID_NRN) {
       throw new Error('Could not parse nrn of invalid length');
     }
@@ -97,4 +96,18 @@ export function parse(nrnInput: NrnInput): Nrn {
     return nrnInput as Nrn;
   }
   throw new Error('Could not parse nrn of invalid type');
+}
+
+function normalizeMonth (month: string): number {
+  const m = parseInt(month);
+  if (m < 13) {
+    if (m === 0) {
+      return 6;
+    }
+    // normal month => normal RNR
+    return m;
+  } else {
+    // BIS number, substract 20 or 40 until you have a valid month
+    return m - 20 < 13 ? m - 20 : m - 40;
+  }
 }
