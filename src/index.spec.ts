@@ -35,12 +35,12 @@ describe('getBirthDate()', () => {
     );
   });
   it('should extract the correct birthdate from a NRN', () => {
-    expect(nrnUtils.getBirthDate('810212 896 71')).toEqual(new Date('02-12-1981'));
+    expect(nrnUtils.getBirthDate('810212 896 71').getTime()).toBe(new Date('02-12-1981').getTime());
   });
   it('should extract the correct birthdate from a BIS number', () => {
-    expect(nrnUtils.getBirthDate('814212 896 60')).toEqual(new Date('02-12-1981'));
-    expect(nrnUtils.getBirthDate('812212 896 17')).toEqual(new Date('02-12-1981'));
-    expect(nrnUtils.getBirthDate('810000 896 29')).toEqual(new Date('06-01-1981'));
+    expect(nrnUtils.getBirthDate('814212 896 60').getTime()).toBe(new Date('02-12-1981').getTime());
+    expect(nrnUtils.getBirthDate('812212 896 17').getTime()).toBe(new Date('02-12-1981').getTime());
+    expect(nrnUtils.getBirthDate('810000 896 29').getTime()).toBe(new Date('06-01-1981').getTime());
   });
   it('should always parse in Belgian timezone', () => {
     // This test depends on the timezone's current computer.
