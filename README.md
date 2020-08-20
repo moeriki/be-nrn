@@ -62,7 +62,7 @@ isBiologicalMale('860814 001 00'); // => true
 
 ### `isBirthDateKnown(nrn: string): boolean`
 
-Determine if the birthdate is known. Is is possible (eg. for migrated people) to have an unknown date of birth.
+Determine if the birthdate is known. It is possible (eg. for migrated people) to have an unknown date of birth.
 
 ```js
 isBirthdateKnown('860814 001 00'); // => true
@@ -88,7 +88,7 @@ isEqual('860814 000 00', '86.08.14-000.00'); // => true
 
 ### `isGenderKnown(nrn: string): boolean`
 
-Determine if the gender is known. Is is possible (eg. for migrated people) to have an unknown gender.
+Determine if the gender is known. It is possible (eg. for migrated people) to have an unknown gender.
 
 ```js
 isGenderKnown('860814 000 00'); // => true
