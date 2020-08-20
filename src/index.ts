@@ -136,19 +136,13 @@ export function isBisNumber(nrn: NrnInput): boolean {
   return month > 12 || month === 0;
 }
 
-export function isBisBirthdateKnown(nrn: NrnInput): boolean {
-  if (!isBisNumber(nrn)) {
-    throw new Error('This is not a BIS number');
-  }
+export function isBirthdateKnown(nrn: NrnInput): boolean {
   const month = getBirthMonth(nrn);
   const day = getBirthDay(nrn);
   return month > 0 && day > 0;
 }
 
-export function isBisGenderKnown(nrn: NrnInput): boolean {
-  if (!isBisNumber(nrn)) {
-    throw new Error('This is not a BIS number');
-  }
+export function isGenderKnown(nrn: NrnInput): boolean {
   const { birthDate } = parse(nrn);
   return parseInt(birthDate[1]) > BIS_MONTH_INCREMENT_GENDER_KNOWN;
 }

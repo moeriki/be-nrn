@@ -185,42 +185,24 @@ describe('isBisNumber()', () => {
   });
 });
 
-describe('isBisBirthdateKnown()', () => {
+describe('isBirthdateKnown()', () => {
   it('should return true if the birthdate can be extracted from the given BIS number', () => {
-    expect(nrnUtils.isBisBirthdateKnown('814212 896 60')).toBe(true);
+    expect(nrnUtils.isBirthdateKnown('814212 896 60')).toBe(true);
   });
 
   it('should return false if the birthdate cannot be extracted from the given BIS number', () => {
-    expect(nrnUtils.isBisBirthdateKnown('814200 896 60')).toBe(false);
-    expect(nrnUtils.isBisBirthdateKnown('810012 896 60')).toBe(false);
-  });
-
-  it('should throw an error if a normal NRN is given as input', () => {
-    try {
-      nrnUtils.isBisBirthdateKnown('810212 896 71')
-    } catch (error) {
-      expect(error.message).toBe('This is not a BIS number');
-    }
-    expect.assertions(1);
+    expect(nrnUtils.isBirthdateKnown('814200 896 60')).toBe(false);
+    expect(nrnUtils.isBirthdateKnown('810012 896 60')).toBe(false);
   });
 });
 
-describe('isBisGenderKnown()', () => {
+describe('isGenderKnown()', () => {
   it('should return true if the gender of the person with the given BIS number is not known', () => {
-    expect(nrnUtils.isBisGenderKnown('814212 896 60')).toBe(true);
+    expect(nrnUtils.isGenderKnown('814212 896 60')).toBe(true);
   });
 
   it('should return false if the gender of the person with the given BIS number is known', () => {
-    expect(nrnUtils.isBisGenderKnown('812200 896 60')).toBe(false);
-  });
-
-  it('should throw an error if a normal NRN is given as input', () => {
-    try {
-      nrnUtils.isBisGenderKnown('810212 896 71');
-    } catch (error) {
-      expect(error.message).toBe('This is not a BIS number');
-    }
-    expect.assertions(1);
+    expect(nrnUtils.isGenderKnown('812200 896 60')).toBe(false);
   });
 });
 
