@@ -17,6 +17,8 @@ type NrnInput = string | Nrn;
 
 const AGE_LEGAL_ADULT = 18;
 
+const BIS_MONTH_INCREMENT_GENDER_UNKNOWN = 20;
+
 const LENGTH_VALID_NRN = 11; // Eg. 86081441359
 
 const matchesNrnInterface = (nrn: Nrn): boolean =>
@@ -35,10 +37,11 @@ function getBirthDay(nrn: NrnInput): number {
 
 function getBirthMonth(nrn: NrnInput): number {
   const { birthDate } = parse(nrn);
-  if (isBisNumber(nrn)) {
-    return getBisBirthMonth(nrn);
+  let birthMonth = parseInt(birthDate[1]);
+  while (birthMonth >= BIS_MONTH_INCREMENT_GENDER_UNKNOWN) {
+    birthMonth -= BIS_MONTH_INCREMENT_GENDER_UNKNOWN;
   }
-  return parseInt(birthDate[1]);
+  return birthMonth;
 }
 
 function getBirthYear(nrn: NrnInput): number {
@@ -57,18 +60,6 @@ function getBirthYear(nrn: NrnInput): number {
     );
   }
   return year;
-}
-
-function getBisBirthMonth(nrn: NrnInput): number {
-  if (!isBisNumber(nrn)) {
-    throw new Error('This is not a BIS number');
-  }
-  const { birthDate } = parse(nrn);
-  const month = parseInt(birthDate[1]);
-  if (month === 0) {
-    return month;
-  }
-  return month > 40 ? month - 40 : month - 20;
 }
 
 export function getAge(
@@ -145,7 +136,10 @@ export function isBisNumber(nrn: NrnInput): boolean {
 }
 
 export function isBisBirthdateKnown(nrn: NrnInput): boolean {
-  const month = getBisBirthMonth(nrn);
+  if (!isBisNumber(nrn)) {
+    throw new Error('This is not a BIS number');
+  }
+  const month = getBirthMonth(nrn);
   const day = getBirthDay(nrn);
   return month > 0 && day > 0;
 }
