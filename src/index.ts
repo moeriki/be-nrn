@@ -31,13 +31,11 @@ const mod97 = (input: string): string =>
 const parseDate = (input: string) =>
   parseFromTimeZone(input, { timeZone: 'Europe/Brussels' });
 
-function getBirthDay(nrn: NrnInput): number {
-  const { birthDate } = parse(nrn);
+function getBirthDay(birthDate: NrnBirthDate): number {
   return parseInt(birthDate[2]);
 }
 
-function getBirthMonth(nrn: NrnInput): number {
-  const { birthDate } = parse(nrn);
+function getBirthMonth(birthDate: NrnBirthDate): number {
   let birthMonth = parseInt(birthDate[1]);
   while (birthMonth >= BIS_MONTH_INCREMENT_GENDER_UNKNOWN) {
     birthMonth -= BIS_MONTH_INCREMENT_GENDER_UNKNOWN;
@@ -53,9 +51,10 @@ export function getAge(
 }
 
 export function getBirthDate(nrn: NrnInput): Date {
-  const year = getBirthYear(nrn); // Eg. '86' from '860814'
-  const month = getBirthMonth(nrn); // Eg. 8 from '860814'
-  const day = getBirthDay(nrn); // Eg. 14 from '860814'
+  const parsedNrn = parse(nrn);
+  const year = getBirthYear(parsedNrn); // Eg. '86' from '860814'
+  const month = getBirthMonth(parsedNrn.birthDate); // Eg. 8 from '860814'
+  const day = getBirthDay(parsedNrn.birthDate); // Eg. 14 from '860814'
   if (month === 0 || day === 0) {
     throw new Error('Birth date is unknown');
   }
@@ -91,8 +90,9 @@ export function isBiologicalMale(nrn: NrnInput): boolean {
 }
 
 export function isBirthdateKnown(nrn: NrnInput): boolean {
-  const month = getBirthMonth(nrn);
-  const day = getBirthDay(nrn);
+  const { birthDate } = parse(nrn);
+  const month = getBirthMonth(birthDate);
+  const day = getBirthDay(birthDate);
   return month !== 0 && day !== 0;
 }
 
