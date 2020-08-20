@@ -56,6 +56,7 @@ describe('getBirthDate()', () => {
     } catch (err) {
       expect(err.message).toBe('Birth date is unknown');
     }
+    expect.assertions(1);
   });
 
   it('should always parse in Belgian timezone', () => {
@@ -200,6 +201,7 @@ describe('isBisBirthdateKnown()', () => {
     } catch (error) {
       expect(error.message).toBe('This is not a BIS number');
     }
+    expect.assertions(1);
   });
 });
 
@@ -218,6 +220,7 @@ describe('isBisGenderKnown()', () => {
     } catch (error) {
       expect(error.message).toBe('This is not a BIS number');
     }
+    expect.assertions(1);
   });
 });
 
