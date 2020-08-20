@@ -90,8 +90,29 @@ export function isBiologicalMale(nrn: NrnInput): boolean {
   return Number(serial) % 2 === 1;
 }
 
+export function isBirthdateKnown(nrn: NrnInput): boolean {
+  const month = getBirthMonth(nrn);
+  const day = getBirthDay(nrn);
+  return month !== 0 && day !== 0;
+}
+
+export function isBisNumber(nrn: NrnInput): boolean {
+  const { birthDate } = parse(nrn);
+  const month = parseInt(birthDate[1]);
+  return month >= BIS_MONTH_INCREMENT_GENDER_UNKNOWN || month === 0;
+}
+
 export function isEqual(nrn1: NrnInput, nrn2: NrnInput): boolean {
   return normalize(nrn1) === normalize(nrn2);
+}
+
+export function isGenderKnown(nrn: NrnInput): boolean {
+  const { birthDate } = parse(nrn);
+  return parseInt(birthDate[1]) >= BIS_MONTH_INCREMENT_GENDER_KNOWN;
+}
+
+export function isNrnNumber(nrn: NrnInput): boolean {
+  return !isBisNumber(nrn);
 }
 
 export function isLegalAdult(nrn: NrnInput): boolean {
@@ -128,25 +149,4 @@ export function parse(nrn: NrnInput): Nrn {
     return nrn as Nrn;
   }
   throw new Error('Could not parse nrn of invalid type');
-}
-
-export function isBisNumber(nrn: NrnInput): boolean {
-  const { birthDate } = parse(nrn);
-  const month = parseInt(birthDate[1]);
-  return month >= BIS_MONTH_INCREMENT_GENDER_UNKNOWN || month === 0;
-}
-
-export function isBirthdateKnown(nrn: NrnInput): boolean {
-  const month = getBirthMonth(nrn);
-  const day = getBirthDay(nrn);
-  return month !== 0 && day !== 0;
-}
-
-export function isGenderKnown(nrn: NrnInput): boolean {
-  const { birthDate } = parse(nrn);
-  return parseInt(birthDate[1]) >= BIS_MONTH_INCREMENT_GENDER_KNOWN;
-}
-
-export function isNrnNumber(nrn: NrnInput): boolean {
-  return !isBisNumber(nrn);
 }
