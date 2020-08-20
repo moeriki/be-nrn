@@ -32,7 +32,7 @@ Age calculation is based on midnight in the Brussels timezone, regardless of the
 
 #### options
 
-* `comparisonDate: Date` – get the age on a specific date
+- `comparisonDate: Date` – get the age on a specific date
 
 ### `getBirthDate(nrn: string): Date`
 
@@ -60,12 +60,40 @@ Determine if the biological birth gender of a citizen's NRN is male.
 isBiologicalMale('860814 001 00'); // => true
 ```
 
+### `isBirthDateKnown(nrn: string): boolean`
+
+Determine if the birthdate is known. Is is possible (eg. for migrated people) to have an unknown date of birth.
+
+```js
+isBirthdateKnown('860814 001 00'); // => true
+isBirthdateKnown('002000 001 00'); // => false
+```
+
+### `isBisNumber(nrn: string): boolean`
+
+Determine if an NRN number is also a BIS number.
+
+```js
+isBisNumber('860814 001 00'); // => false
+isBisNumber('862814 001 00'); // => true
+```
+
 ### `isEqual(nrn1: string, nrn2: string): boolean`
 
 Compare two NRN's for equality.
 
 ```js
 isEqual('860814 000 00', '86.08.14-000.00'); // => true
+```
+
+### `isGenderKnown(nrn: string): boolean`
+
+Determine if the gender is known. Is is possible (eg. for migrated people) to have an unknown gender.
+
+```js
+isGenderKnown('860814 000 00'); // => true
+isGenderKnown('862814 000 00'); // => false
+isGenderKnown('864814 000 00'); // => true
 ```
 
 ### `isLegalAdult(nrn: string): boolean`
