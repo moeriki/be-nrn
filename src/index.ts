@@ -45,24 +45,6 @@ function getBirthMonth(nrn: NrnInput): number {
   return birthMonth;
 }
 
-function getBirthYear(nrn: NrnInput): number {
-  const { birthDate, serial, checksum } = parse(nrn);
-  const partialYear = birthDate[0]; // Eg. '86' from '860814'
-  let year: number;
-  const checksum19 = mod97(`${birthDate.join('')}${serial}`);
-  const checksum20 = mod97(`2${birthDate.join('')}${serial}`);
-  if (checksum19 === checksum) {
-    year = Number(`19${partialYear}`);
-  } else if (checksum20 === checksum) {
-    year = Number(`20${partialYear}`);
-  } else {
-    throw new Error(
-      `Could not calculate birthDate with invalid checksum of "${checksum}", expected "${checksum19}" for 1900 or "${checksum20}" for 2000`,
-    );
-  }
-  return year;
-}
-
 export function getAge(
   nrn: NrnInput,
   { comparisonDate = new Date() }: { comparisonDate?: Date } = {},
@@ -78,6 +60,24 @@ export function getBirthDate(nrn: NrnInput): Date {
     throw new Error('Birth date is unknown');
   }
   return parseDate(`${year}-${month}-${day}`);
+}
+
+export function getBirthYear(nrn: NrnInput): number {
+  const { birthDate, serial, checksum } = parse(nrn);
+  const partialYear = birthDate[0]; // Eg. '86' from '860814'
+  let year: number;
+  const checksum19 = mod97(`${birthDate.join('')}${serial}`);
+  const checksum20 = mod97(`2${birthDate.join('')}${serial}`);
+  if (checksum19 === checksum) {
+    year = Number(`19${partialYear}`);
+  } else if (checksum20 === checksum) {
+    year = Number(`20${partialYear}`);
+  } else {
+    throw new Error(
+      `Could not calculate birthDate with invalid checksum of "${checksum}", expected "${checksum19}" for 1900 or "${checksum20}" for 2000`,
+    );
+  }
+  return year;
 }
 
 export function isBiologicalFemale(nrn: NrnInput): boolean {
