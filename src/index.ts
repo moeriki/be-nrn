@@ -150,12 +150,3 @@ export function isGenderKnown(nrn: NrnInput): boolean {
 export function isNrnNumber(nrn: NrnInput): boolean {
   return !isBisNumber(nrn);
 }
-
-export function isValidNrnNumber(nrn: NrnInput) {
-  try {
-    getBirthYear(nrn);
-    return true;
-  } catch (error) {
-    return false;
-  }
-}

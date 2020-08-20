@@ -223,13 +223,3 @@ describe('isNrnNumber()', () => {
     expect(nrnUtils.isNrnNumber('814212 896 60')).toBe(false);
   });
 });
-
-describe('isValidNrnNumber()', () => {
-  it('should return true if the input is a a valid NRN number', () => {
-    expect(nrnUtils.isValidNrnNumber('810212 896 71')).toBe(true);
-  });
-
-  it('should return false if the input is not a valid NRN number', () => {
-    expect(nrnUtils.isValidNrnNumber('810212 896 72')).toBe(false);
-  });
-});
