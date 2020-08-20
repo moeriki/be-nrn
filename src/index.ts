@@ -89,7 +89,7 @@ export function isBiologicalMale(nrn: NrnInput): boolean {
   return Number(serial) % 2 === 1;
 }
 
-export function isBirthdateKnown(nrn: NrnInput): boolean {
+export function isBirthDateKnown(nrn: NrnInput): boolean {
   const { birthDate } = parse(nrn);
   const month = getBirthMonth(birthDate);
   const day = getBirthDay(birthDate);

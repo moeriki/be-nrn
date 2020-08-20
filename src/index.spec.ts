@@ -185,14 +185,14 @@ describe('isBisNumber()', () => {
   });
 });
 
-describe('isBirthdateKnown()', () => {
+describe('isBirthDateKnown()', () => {
   it('should return true if the birthdate can be extracted from the given BIS number', () => {
-    expect(nrnUtils.isBirthdateKnown('814212 896 60')).toBe(true);
+    expect(nrnUtils.isBirthDateKnown('814212 896 60')).toBe(true);
   });
 
   it('should return false if the birthdate cannot be extracted from the given BIS number', () => {
-    expect(nrnUtils.isBirthdateKnown('814200 896 60')).toBe(false);
-    expect(nrnUtils.isBirthdateKnown('810012 896 60')).toBe(false);
+    expect(nrnUtils.isBirthDateKnown('814200 896 60')).toBe(false);
+    expect(nrnUtils.isBirthDateKnown('810012 896 60')).toBe(false);
   });
 });
 
