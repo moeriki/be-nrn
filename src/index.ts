@@ -99,7 +99,7 @@ export function isBirthdateKnown(nrn: NrnInput): boolean {
 export function isBisNumber(nrn: NrnInput): boolean {
   const { birthDate } = parse(nrn);
   const month = parseInt(birthDate[1]);
-  return month >= BIS_MONTH_INCREMENT_GENDER_UNKNOWN || month === 0;
+  return month >= BIS_MONTH_INCREMENT_GENDER_UNKNOWN;
 }
 
 export function isEqual(nrn1: NrnInput, nrn2: NrnInput): boolean {
