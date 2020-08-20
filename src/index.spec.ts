@@ -35,6 +35,23 @@ describe('getBirthDate()', () => {
     );
   });
 
+  it('should extract the correct birthdate from a NRN', () => {
+    expect(nrnUtils.getBirthDate('810212 896 71')).toEqual(parseDate('1981-02-12'));
+  });
+
+  it('should extract the correct birthdate from a BIS number', () => {
+    expect(nrnUtils.getBirthDate('814212 896 60')).toEqual(parseDate('1981-02-12'));
+    expect(nrnUtils.getBirthDate('812212 896 17')).toEqual(parseDate('1981-02-12'));
+  });
+
+  it('should throw an error if the birth date is unknown', () => {
+    try {
+      nrnUtils.getBirthDate('810000 896 29');
+    } catch (err) {
+      expect(err.message).toBe('Birth date is unknown');
+    }
+  });
+
   it('should always parse in Belgian timezone', () => {
     // This test depends on the timezone's current computer.
     // If it succeeds locally (running on a computer in Belgian timezone),
@@ -114,7 +131,7 @@ describe('normalize()', () => {
   it('should return string from nrn object', () => {
     expect(
       nrnUtils.normalize({
-        birthDate: '860814',
+        birthDate: ['86', '08', '14'],
         serial: '000',
         checksum: '59',
       }),
@@ -138,11 +155,78 @@ describe('parse()', () => {
 
   it('should return valid nrn object', () => {
     expect(
-      nrnUtils.parse({ birthDate: '860814', serial: '000', checksum: '11' }),
-    ).toEqual({ birthDate: '860814', serial: '000', checksum: '11' });
+      nrnUtils.parse({ birthDate: ['86', '08', '14'], serial: '000', checksum: '11' }),
+    ).toEqual({ birthDate: ['86', '08', '14'], serial: '000', checksum: '11' });
   });
 
   it('should throw on invalid type', () => {
     expect(() => nrnUtils.parse(null as any)).toThrowErrorMatchingSnapshot();
+  });
+});
+
+describe('isBisNumber()', () => {
+  it('should return true if the input is a BIS number', () => {
+    expect(nrnUtils.isBisNumber('814212 896 60')).toBe(true);
+  });
+
+  it('should return false if the input is not a BIS number', () => {
+    expect(nrnUtils.isBisNumber('810212 896 71')).toBe(false);
+  });
+});
+
+describe('isBisBirthdateKnown()', () => {
+  it('should return true if the birthdate can be extracted from the given BIS number', () => {
+    expect(nrnUtils.isBisBirthdateKnown('814212 896 60')).toBe(true);
+  });
+
+  it('should return false if the birthdate cannot be extracted from the given BIS number', () => {
+    expect(nrnUtils.isBisBirthdateKnown('814200 896 60')).toBe(false);
+    expect(nrnUtils.isBisBirthdateKnown('810012 896 60')).toBe(false);
+  });
+
+  it('should throw an error if a normal NRN is given as input', () => {
+    try {
+      nrnUtils.isBisBirthdateKnown('810212 896 71')
+    } catch (error) {
+      expect(error.message).toBe('This is not a BIS number');
+    }
+  });
+});
+
+describe('isBisGenderKnown()', () => {
+  it('should return true if the gender of the person with the given BIS number is not known', () => {
+    expect(nrnUtils.isBisGenderKnown('814212 896 60')).toBe(true);
+  });
+
+  it('should return false if the gender of the person with the given BIS number is known', () => {
+    expect(nrnUtils.isBisGenderKnown('812200 896 60')).toBe(false);
+  });
+
+  it('should throw an error if a normal NRN is given as input', () => {
+    try {
+      nrnUtils.isBisGenderKnown('810212 896 71')
+    } catch (error) {
+      expect(error.message).toBe('This is not a BIS number');
+    }
+  });
+});
+
+describe('isNrnNumber()', () => {
+  it('should return true if the input is a NRN number', () => {
+    expect(nrnUtils.isNrnNumber('810212 896 71')).toBe(true);
+  });
+
+  it('should return false if the input is not a NRN number', () => {
+    expect(nrnUtils.isNrnNumber('814212 896 60')).toBe(false);
+  });
+});
+
+describe('isValidNrnNumber()', () => {
+  it('should return true if the input is a a valid NRN number', () => {
+    expect(nrnUtils.isValidNrnNumber('810212 896 71')).toBe(true);
+  });
+
+  it('should return false if the input is not a valid NRN number', () => {
+    expect(nrnUtils.isValidNrnNumber('810212 896 72')).toBe(false);
   });
 });
