@@ -36,12 +36,18 @@ describe('getBirthDate()', () => {
   });
 
   it('should extract the correct birthdate from a NRN', () => {
-    expect(nrnUtils.getBirthDate('810212 896 71')).toEqual(parseDate('1981-02-12'));
+    expect(nrnUtils.getBirthDate('810212 896 71')).toEqual(
+      parseDate('1981-02-12'),
+    );
   });
 
   it('should extract the correct birthdate from a BIS number', () => {
-    expect(nrnUtils.getBirthDate('814212 896 60')).toEqual(parseDate('1981-02-12'));
-    expect(nrnUtils.getBirthDate('812212 896 17')).toEqual(parseDate('1981-02-12'));
+    expect(nrnUtils.getBirthDate('814212 896 60')).toEqual(
+      parseDate('1981-02-12'),
+    );
+    expect(nrnUtils.getBirthDate('812212 896 17')).toEqual(
+      parseDate('1981-02-12'),
+    );
   });
 
   it('should throw an error if the birth date is unknown', () => {
@@ -155,7 +161,11 @@ describe('parse()', () => {
 
   it('should return valid nrn object', () => {
     expect(
-      nrnUtils.parse({ birthDate: ['86', '08', '14'], serial: '000', checksum: '11' }),
+      nrnUtils.parse({
+        birthDate: ['86', '08', '14'],
+        serial: '000',
+        checksum: '11',
+      }),
     ).toEqual({ birthDate: ['86', '08', '14'], serial: '000', checksum: '11' });
   });
 
@@ -204,7 +214,7 @@ describe('isBisGenderKnown()', () => {
 
   it('should throw an error if a normal NRN is given as input', () => {
     try {
-      nrnUtils.isBisGenderKnown('810212 896 71')
+      nrnUtils.isBisGenderKnown('810212 896 71');
     } catch (error) {
       expect(error.message).toBe('This is not a BIS number');
     }
