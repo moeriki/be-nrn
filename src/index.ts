@@ -74,7 +74,7 @@ export function getBirthDate(nrn: NrnInput): Date {
   const year = getBirthYear(nrn); // Eg. '86' from '860814'
   const month = getBirthMonth(nrn); // Eg. 8 from '860814'
   const day = getBirthDay(nrn); // Eg. 14 from '860814'
-  if (month < 1 || day < 1) {
+  if (month === 0 || day === 0) {
     throw new Error('Birth date is unknown');
   }
   return parseDate(`${year}-${month}-${day}`);
@@ -133,13 +133,13 @@ export function parse(nrn: NrnInput): Nrn {
 export function isBisNumber(nrn: NrnInput): boolean {
   const { birthDate } = parse(nrn);
   const month = parseInt(birthDate[1]);
-  return month > 12 || month === 0;
+  return month >= BIS_MONTH_INCREMENT_GENDER_UNKNOWN || month === 0;
 }
 
 export function isBirthdateKnown(nrn: NrnInput): boolean {
   const month = getBirthMonth(nrn);
   const day = getBirthDay(nrn);
-  return month > 0 && day > 0;
+  return month !== 0 && day !== 0;
 }
 
 export function isGenderKnown(nrn: NrnInput): boolean {
