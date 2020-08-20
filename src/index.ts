@@ -5,8 +5,10 @@ import { parseFromTimeZone } from 'date-fns-timezone';
  * https://nl.wikipedia.org/wiki/Rijksregisternummer
  */
 
+type NrnBirthDate = readonly [string, string, string];
+
 export interface Nrn {
-  birthDate: readonly [string, string, string];
+  birthDate: NrnBirthDate;
   serial: string;
   checksum: string;
 }
@@ -36,7 +38,7 @@ function getBirthMonth(nrn: NrnInput): number {
   if (isBisNumber(nrn)) {
     return getBisBirthMonth(nrn);
   }
-    return parseInt(birthDate[1]);
+  return parseInt(birthDate[1]);
 }
 
 function getBirthYear(nrn: NrnInput): number {
@@ -69,10 +71,6 @@ function getBisBirthMonth(nrn: NrnInput): number {
   return month > 40 ? month - 40 : month - 20;
 }
 
-function makeReadonlyStringArray(inputString: string): readonly [string, string, string] {
-  return [inputString.slice(0, 2), inputString.slice(2, 4), inputString.slice(4)];
-}
-
 export function getAge(
   nrn: NrnInput,
   { comparisonDate = new Date() }: { comparisonDate?: Date } = {},
@@ -82,7 +80,7 @@ export function getAge(
 
 export function getBirthDate(nrn: NrnInput): Date {
   const year = getBirthYear(nrn); // Eg. '86' from '860814'
-  const month = getBirthMonth(nrn) ; // Eg. 8 from '860814'
+  const month = getBirthMonth(nrn); // Eg. 8 from '860814'
   const day = getBirthDay(nrn); // Eg. 14 from '860814'
   if (month < 1 || day < 1) {
     throw new Error('Birth date is unknown');
@@ -125,7 +123,11 @@ export function parse(nrn: NrnInput): Nrn {
       throw new Error('Could not parse nrn of invalid length');
     }
     const birthDateString = normalizedNrn.slice(0, 6); // Eg. '860814' from '86081441359'
-    const birthDate = makeReadonlyStringArray(birthDateString); // ['86', '08', '14'] from '860814'
+    const birthDate: NrnBirthDate = [
+      birthDateString.slice(0, 2),
+      birthDateString.slice(2, 4),
+      birthDateString.slice(4),
+    ]; // Eg. ['86', '08', '14'] from '860814'
     const serial = normalizedNrn.slice(6, 9); // Eg. '413' from '86081441359'
     const checksum = normalizedNrn.slice(9, 11); // Eg. '59' from '86081441359'
     return { birthDate, serial, checksum };
