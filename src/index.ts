@@ -144,7 +144,7 @@ export function isBirthdateKnown(nrn: NrnInput): boolean {
 
 export function isGenderKnown(nrn: NrnInput): boolean {
   const { birthDate } = parse(nrn);
-  return parseInt(birthDate[1]) > BIS_MONTH_INCREMENT_GENDER_KNOWN;
+  return parseInt(birthDate[1]) >= BIS_MONTH_INCREMENT_GENDER_KNOWN;
 }
 
 export function isNrnNumber(nrn: NrnInput): boolean {

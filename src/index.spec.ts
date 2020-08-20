@@ -197,12 +197,20 @@ describe('isBirthdateKnown()', () => {
 });
 
 describe('isGenderKnown()', () => {
-  it('should return true if the gender of the person with the given BIS number is not known', () => {
+  it('should return true if the gender and the birthdate are known', () => {
     expect(nrnUtils.isGenderKnown('814212 896 60')).toBe(true);
   });
 
-  it('should return false if the gender of the person with the given BIS number is known', () => {
+  it('should return true if the gender is known and the birthdate is unknown', () => {
+    expect(nrnUtils.isGenderKnown('814000 896 60')).toBe(true);
+  });
+
+  it('should return false if the gender is unknown', () => {
     expect(nrnUtils.isGenderKnown('812200 896 60')).toBe(false);
+  });
+
+  it('should return false if the gender and the birthdate are unknown', () => {
+    expect(nrnUtils.isGenderKnown('812000 896 60')).toBe(false);
   });
 });
 
