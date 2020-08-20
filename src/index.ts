@@ -26,21 +26,21 @@ const mod97 = (input: string): string =>
 const parseDate = (input: string) =>
   parseFromTimeZone(input, { timeZone: 'Europe/Brussels' });
 
-function getBirthDay(nrnInput: NrnInput): number {
-  const { birthDate } = parse(nrnInput);
+function getBirthDay(nrn: NrnInput): number {
+  const { birthDate } = parse(nrn);
   return parseInt(birthDate[2]);
 }
 
-function getBirthMonth(nrnInput: NrnInput): number {
-  const { birthDate } = parse(nrnInput);
-  if (isBisNumber(nrnInput)) {
-    return getBisBirthMonth(nrnInput);
+function getBirthMonth(nrn: NrnInput): number {
+  const { birthDate } = parse(nrn);
+  if (isBisNumber(nrn)) {
+    return getBisBirthMonth(nrn);
   }
     return parseInt(birthDate[1]);
 }
 
-function getBirthYear(nrnInput: NrnInput): number {
-  const { birthDate, serial, checksum } = parse(nrnInput);
+function getBirthYear(nrn: NrnInput): number {
+  const { birthDate, serial, checksum } = parse(nrn);
   const partialYear = birthDate[0]; // Eg. '86' from '860814'
   let year: number;
   const checksum19 = mod97(`${birthDate.join('')}${serial}`);
@@ -57,11 +57,11 @@ function getBirthYear(nrnInput: NrnInput): number {
   return year;
 }
 
-function getBisBirthMonth(nrnInput: NrnInput): number {
-  if (!isBisNumber(nrnInput)) {
+function getBisBirthMonth(nrn: NrnInput): number {
+  if (!isBisNumber(nrn)) {
     throw new Error('This is not a BIS number');
   }
-  const { birthDate } = parse(nrnInput);
+  const { birthDate } = parse(nrn);
   const month = parseInt(birthDate[1]);
   if (month === 0) {
     return month;
@@ -80,23 +80,23 @@ export function getAge(
   return differenceInYears(getBirthDate(nrn), comparisonDate);
 }
 
-export function getBirthDate(nrnInput: NrnInput): Date {
-  const year = getBirthYear(nrnInput); // Eg. '86' from '860814'
-  const month = getBirthMonth(nrnInput) ; // Eg. 8 from '860814'
-  const day = getBirthDay(nrnInput); // Eg. 14 from '860814'
+export function getBirthDate(nrn: NrnInput): Date {
+  const year = getBirthYear(nrn); // Eg. '86' from '860814'
+  const month = getBirthMonth(nrn) ; // Eg. 8 from '860814'
+  const day = getBirthDay(nrn); // Eg. 14 from '860814'
   if (month < 1 || day < 1) {
     throw new Error('Birth date is unknown');
   }
   return parseDate(`${year}-${month}-${day}`);
 }
 
-export function isBiologicalFemale(nrnInput: NrnInput): boolean {
-  const { serial } = parse(nrnInput);
+export function isBiologicalFemale(nrn: NrnInput): boolean {
+  const { serial } = parse(nrn);
   return Number(serial) % 2 === 0;
 }
 
-export function isBiologicalMale(nrnInput: NrnInput): boolean {
-  const { serial } = parse(nrnInput);
+export function isBiologicalMale(nrn: NrnInput): boolean {
+  const { serial } = parse(nrn);
   return Number(serial) % 2 === 1;
 }
 
@@ -104,23 +104,23 @@ export function isEqual(nrn1: NrnInput, nrn2: NrnInput): boolean {
   return normalize(nrn1) === normalize(nrn2);
 }
 
-export function isLegalAdult(nrnInput: NrnInput): boolean {
-  return getAge(nrnInput) >= AGE_LEGAL_ADULT;
+export function isLegalAdult(nrn: NrnInput): boolean {
+  return getAge(nrn) >= AGE_LEGAL_ADULT;
 }
 
-export function normalize(nrnInput: NrnInput): string {
-  if (typeof nrnInput === 'string') {
-    return nrnInput.replace(/[^\d]+/g, '');
+export function normalize(nrn: NrnInput): string {
+  if (typeof nrn === 'string') {
+    return nrn.replace(/[^\d]+/g, '');
   }
-  if (matchesNrnInterface(nrnInput)) {
-    return `${nrnInput.birthDate.join('')}${nrnInput.serial}${nrnInput.checksum}`;
+  if (matchesNrnInterface(nrn)) {
+    return `${nrn.birthDate.join('')}${nrn.serial}${nrn.checksum}`;
   }
   throw new Error('Could not normalize nrn of invalid type');
 }
 
-export function parse(nrnInput: NrnInput): Nrn {
-  if (typeof nrnInput === 'string') {
-    const normalizedNrn = normalize(nrnInput);
+export function parse(nrn: NrnInput): Nrn {
+  if (typeof nrn === 'string') {
+    const normalizedNrn = normalize(nrn);
     if (normalizedNrn.length !== LENGTH_VALID_NRN) {
       throw new Error('Could not parse nrn of invalid length');
     }
@@ -130,39 +130,39 @@ export function parse(nrnInput: NrnInput): Nrn {
     const checksum = normalizedNrn.slice(9, 11); // Eg. '59' from '86081441359'
     return { birthDate, serial, checksum };
   }
-  if (matchesNrnInterface(nrnInput)) {
-    return nrnInput as Nrn;
+  if (matchesNrnInterface(nrn)) {
+    return nrn as Nrn;
   }
   throw new Error('Could not parse nrn of invalid type');
 }
 
-export function isBisNumber(nrnInput: NrnInput): boolean {
-  const { birthDate } = parse(nrnInput);
+export function isBisNumber(nrn: NrnInput): boolean {
+  const { birthDate } = parse(nrn);
   const month = parseInt(birthDate[1]);
   return month > 12 || month === 0;
 }
 
-export function isBisBirthdateKnown(nrnInput: NrnInput): boolean {
-  const month = getBisBirthMonth(nrnInput);
-  const day = getBirthDay(nrnInput);
+export function isBisBirthdateKnown(nrn: NrnInput): boolean {
+  const month = getBisBirthMonth(nrn);
+  const day = getBirthDay(nrn);
   return month > 0 && day > 0;
 }
 
-export function isBisGenderKnown(nrnInput: NrnInput): boolean {
-  if (!isBisNumber(nrnInput)) {
+export function isBisGenderKnown(nrn: NrnInput): boolean {
+  if (!isBisNumber(nrn)) {
     throw new Error('This is not a BIS number');
   }
-  const { birthDate } = parse(nrnInput);
+  const { birthDate } = parse(nrn);
   return parseInt(birthDate[1]) > 40;
 }
 
-export function isNrnNumber(nrnInput: NrnInput): boolean {
-  return !isBisNumber(nrnInput);
+export function isNrnNumber(nrn: NrnInput): boolean {
+  return !isBisNumber(nrn);
 }
 
-export function isValidNrnNumber(nrnInput: NrnInput) {
+export function isValidNrnNumber(nrn: NrnInput) {
   try {
-    getBirthYear(nrnInput);
+    getBirthYear(nrn);
     return true;
   } catch (error) {
     return false;
