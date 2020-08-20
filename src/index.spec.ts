@@ -186,6 +186,10 @@ describe('isBisNumber()', () => {
 });
 
 describe('isBirthDateKnown()', () => {
+  it('should return true for an NRN', () => {
+    expect(nrnUtils.isBirthDateKnown('860813 000 17')).toBe(true);
+  });
+
   it('should return true if the birthdate can be extracted from the given BIS number', () => {
     expect(nrnUtils.isBirthDateKnown('814212 896 60')).toBe(true);
   });
@@ -197,6 +201,10 @@ describe('isBirthDateKnown()', () => {
 });
 
 describe('isGenderKnown()', () => {
+  it('should return true for an NRN', () => {
+    expect(nrnUtils.isGenderKnown('860813 000 17')).toBe(true);
+  });
+
   it('should return true if the gender and the birthdate are known', () => {
     expect(nrnUtils.isGenderKnown('814212 896 60')).toBe(true);
   });

@@ -108,7 +108,11 @@ export function isEqual(nrn1: NrnInput, nrn2: NrnInput): boolean {
 
 export function isGenderKnown(nrn: NrnInput): boolean {
   const { birthDate } = parse(nrn);
-  return parseInt(birthDate[1]) >= BIS_MONTH_INCREMENT_GENDER_KNOWN;
+  const nrnMonth = parseInt(birthDate[1]);
+  return (
+    nrnMonth < BIS_MONTH_INCREMENT_GENDER_UNKNOWN ||
+    nrnMonth >= BIS_MONTH_INCREMENT_GENDER_KNOWN
+  );
 }
 
 export function isNrnNumber(nrn: NrnInput): boolean {
