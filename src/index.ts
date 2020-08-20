@@ -26,6 +26,53 @@ const mod97 = (input: string): string =>
 const parseDate = (input: string) =>
   parseFromTimeZone(input, { timeZone: 'Europe/Brussels' });
 
+function getBirthDay(nrnInput: NrnInput): number {
+  const { birthDate } = parse(nrnInput);
+  return parseInt(birthDate[2]);
+}
+
+function getBirthMonth(nrnInput: NrnInput): number {
+  const { birthDate } = parse(nrnInput);
+  if (isBisNumber(nrnInput)) {
+    return getBisBirthMonth(nrnInput);
+  }
+    return parseInt(birthDate[1]);
+}
+
+function getBirthYear(nrnInput: NrnInput): number {
+  const { birthDate, serial, checksum } = parse(nrnInput);
+  const partialYear = birthDate[0]; // Eg. '86' from '860814'
+  let year: number;
+  const checksum19 = mod97(`${birthDate.join('')}${serial}`);
+  const checksum20 = mod97(`2${birthDate.join('')}${serial}`);
+  if (checksum19 === checksum) {
+    year = Number(`19${partialYear}`);
+  } else if (checksum20 === checksum) {
+    year = Number(`20${partialYear}`);
+  } else {
+    throw new Error(
+      `Could not calculate birthDate with invalid checksum of "${checksum}", expected "${checksum19}" for 1900 or "${checksum20}" for 2000`,
+    );
+  }
+  return year;
+}
+
+function getBisBirthMonth(nrnInput: NrnInput): number {
+  if (!isBisNumber(nrnInput)) {
+    throw new Error('This is not a BIS number');
+  }
+  const { birthDate } = parse(nrnInput);
+  const month = parseInt(birthDate[1]);
+  if (month === 0) {
+    return month;
+  }
+  return month > 40 ? month - 40 : month - 20;
+}
+
+function makeReadonlyStringArray(inputString: string): readonly [string, string, string] {
+  return [inputString.slice(0, 2), inputString.slice(2, 4), inputString.slice(4)];
+}
+
 export function getAge(
   nrn: NrnInput,
   { comparisonDate = new Date() }: { comparisonDate?: Date } = {},
@@ -89,10 +136,6 @@ export function parse(nrnInput: NrnInput): Nrn {
   throw new Error('Could not parse nrn of invalid type');
 }
 
-function makeReadonlyStringArray(inputString: string): readonly [string, string, string] {
-  return [inputString.slice(0, 2), inputString.slice(2, 4), inputString.slice(4)];
-}
-
 export function isBisNumber(nrnInput: NrnInput): boolean {
   const { birthDate } = parse(nrnInput);
   const month = parseInt(birthDate[1]);
@@ -116,6 +159,7 @@ export function isBisGenderKnown(nrnInput: NrnInput): boolean {
 export function isNrnNumber(nrnInput: NrnInput): boolean {
   return !isBisNumber(nrnInput);
 }
+
 export function isValidNrnNumber(nrnInput: NrnInput) {
   try {
     getBirthYear(nrnInput);
@@ -123,47 +167,4 @@ export function isValidNrnNumber(nrnInput: NrnInput) {
   } catch (error) {
     return false;
   }
-}
-
-function getBirthMonth(nrnInput: NrnInput): number {
-  const { birthDate } = parse(nrnInput);
-  if (isBisNumber(nrnInput)) {
-    return getBisBirthMonth(nrnInput);
-  }
-  return parseInt(birthDate[1]);
-}
-
-function getBirthDay(nrnInput: NrnInput): number {
-  const { birthDate } = parse(nrnInput);
-  return parseInt(birthDate[2]);
-}
-
-function getBirthYear(nrnInput: NrnInput): number {
-  const { birthDate, serial, checksum } = parse(nrnInput);
-  const partialYear = birthDate[0]; // Eg. '86' from '860814'
-  let year: number;
-  const checksum19 = mod97(`${birthDate.join('')}${serial}`);
-  const checksum20 = mod97(`2${birthDate.join('')}${serial}`);
-  if (checksum19 === checksum) {
-    year = Number(`19${partialYear}`);
-  } else if (checksum20 === checksum) {
-    year = Number(`20${partialYear}`);
-  } else {
-    throw new Error(
-      `Could not calculate birthDate with invalid checksum of "${checksum}", expected "${checksum19}" for 1900 or "${checksum20}" for 2000`,
-    );
-  }
-  return year;
-}
-
-function getBisBirthMonth(nrnInput: NrnInput): number {
-  if (!isBisNumber(nrnInput)) {
-    throw new Error('This is not a BIS number');
-  }
-  const { birthDate } = parse(nrnInput);
-  const month = parseInt(birthDate[1]);
-  if (month === 0) {
-    return month;
-  }
-  return month > 40 ? month - 40 : month - 20;
 }
