@@ -18,6 +18,7 @@ type NrnInput = string | Nrn;
 const AGE_LEGAL_ADULT = 18;
 
 const BIS_MONTH_INCREMENT_GENDER_UNKNOWN = 20;
+const BIS_MONTH_INCREMENT_GENDER_KNOWN = 40;
 
 const LENGTH_VALID_NRN = 11; // Eg. 86081441359
 
@@ -149,7 +150,7 @@ export function isBisGenderKnown(nrn: NrnInput): boolean {
     throw new Error('This is not a BIS number');
   }
   const { birthDate } = parse(nrn);
-  return parseInt(birthDate[1]) > 40;
+  return parseInt(birthDate[1]) > BIS_MONTH_INCREMENT_GENDER_KNOWN;
 }
 
 export function isNrnNumber(nrn: NrnInput): boolean {
